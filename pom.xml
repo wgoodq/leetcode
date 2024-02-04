@@ -8,18 +8,20 @@
   <packaging>jar</packaging>
 
   <name>leetcode</name>
-  <url>http://maven.apache.org</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <encoding>UTF-8</encoding>
+    <java.version>1.8</java.version>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
+      <groupId>com.github.sh0nk</groupId>
+      <artifactId>matplotlib4j</artifactId>
+      <version>0.5.0</version>
     </dependency>
   </dependencies>
 </project>
