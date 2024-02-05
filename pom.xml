@@ -23,5 +23,7 @@
       <artifactId>matplotlib4j</artifactId>
       <version>0.5.0</version>
     </dependency>
+
+
   </dependencies>
 </project>
