@@ -65,7 +65,7 @@ public class TwoSum {
         plot.legend().loc("upper right");
         plot.title("Nums Size: " + numsSize + " | Target Count: " + targetCnt);
 
-        plot.savefig("/Users/kyou/Desktop/" + numsSize + "_" + targetCnt + ".png").dpi(2000).format("png");
+//        plot.savefig("/Users/kyou/Desktop/" + numsSize + "_" + targetCnt + ".png").dpi(200).format("png");
 
         try {
             plot.show();
