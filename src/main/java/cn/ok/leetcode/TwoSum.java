@@ -216,11 +216,15 @@ public class TwoSum {
             }
             method1TimeUsed.add(System.currentTimeMillis() - u);
 
+            System.gc();
+
             u = System.currentTimeMillis();
             for (int target : targets) {
                 twosum2(nums, target);
             }
             method2TimeUsed.add(System.currentTimeMillis() - u);
+
+            System.gc();
 
             u = System.currentTimeMillis();
             for (int target : targets) {
@@ -266,7 +270,7 @@ public class TwoSum {
 
     private int[] twosum2(int[] nums, int target) {
 
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>(nums.length);
 
         for (int i = 0; i < nums.length; i++) {
             if (map.containsKey(target - nums[i])) {
@@ -281,7 +285,7 @@ public class TwoSum {
 
     private int[] twosum3(int[] nums, int target) {
 
-        Map<Integer, Integer> map = new HashMap<>();
+        Map<Integer, Integer> map = new HashMap<>(nums.length);
 
         for (int i = 0, j = nums.length - 1; i <= j; i++, j--) {
             if (map.containsKey(target - nums[i])) {

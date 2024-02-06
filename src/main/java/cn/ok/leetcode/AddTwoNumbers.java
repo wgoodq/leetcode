@@ -3,11 +3,11 @@ package cn.ok.leetcode;
 public class AddTwoNumbers {
     public static void main(String[] args) {
 
-        String ss = "/Library/Java/JavaVirtualMachines/openjdk-8.jdk/Contents/Home/bin/java -Xmx$m -Xms$m -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:gc-$m.log -Dfile.encoding=UTF-8 -jar /Users/kyou/WorkSpace/Gitee/leetcode/target/leetcode-1.0-jar-with-dependencies.jar $";
+        String ss = "java -Xmx$m -Xms$m -jar B:\\WorkSpace_Java\\KyouDemos\\leetcode\\target\\leetcode-1.0-jar-with-dependencies.jar $";
 
 
-        for (int i = 2; i <= 13; i++) {
-            System.out.println(ss.replace("$", "" + (int)Math.round(Math.pow(2, i))));
+        for (int i = 1; i <= 40; i++) {
+            System.out.println(ss.replace("$", "" + 1024 * i));
         }
 
 
