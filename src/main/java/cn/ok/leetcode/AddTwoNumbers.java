@@ -1,21 +1,14 @@
 package cn.ok.leetcode;
 
-import com.github.sh0nk.matplotlib4j.NumpyUtils;
-import com.github.sh0nk.matplotlib4j.Plot;
-import com.github.sh0nk.matplotlib4j.PythonConfig;
-import com.github.sh0nk.matplotlib4j.PythonExecutionException;
-import com.google.common.collect.Lists;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 public class AddTwoNumbers {
-    public static void main(String[] args) throws PythonExecutionException, IOException {
+    public static void main(String[] args) {
 
+        String ss = "/Library/Java/JavaVirtualMachines/openjdk-8.jdk/Contents/Home/bin/java -Xmx$m -Xms$m -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:gc-$m.log -Dfile.encoding=UTF-8 -jar /Users/kyou/WorkSpace/Gitee/leetcode/target/leetcode-1.0-jar-with-dependencies.jar $";
+
+
+        for (int i = 2; i <= 13; i++) {
+            System.out.println(ss.replace("$", "" + (int)Math.round(Math.pow(2, i))));
+        }
 
 
 

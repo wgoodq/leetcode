@@ -1,8 +1,12 @@
 package cn.ok.leetcode;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.sh0nk.matplotlib4j.Plot;
 import com.github.sh0nk.matplotlib4j.PythonExecutionException;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -11,24 +15,27 @@ public class TwoSum {
 
     private static final int RANDOM_MAX = 20000;
     private static final int RANDOM_MIN = 0;
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("-dd_HH.mm.ss");
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("-HH.mm.ss");
     private final Random random = new Random();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+        String memery = args[0];
+
         TwoSum twoSum = new TwoSum();
 
         // 各方案单次处理耗时统计分析
         // twoSum.test1();
 
         // 在Nums数组固定情况下，各方案实际总耗时统计分析
-         twoSum.test2();
+        twoSum.test2(memery, "-1-2-3-");
 
         // 在Target数量固定时，分析各算法随着Nums数组变化，计算耗时情况。
         // 结论：
         //      1. 基于Hash查找的算法，性能稳定性极好。
         //      2. 双循环查找算法运气成分太多，稳定性较差。
         //      3. 在Nums数组较少的情况下，双循环查找算法简单快捷，因此相对更具优势。
-        // twoSum.test3();
+//         twoSum.test3();
     }
 
 
@@ -85,17 +92,18 @@ public class TwoSum {
         }
     }
 
-
-
     /**
      * Target 数量固定情况下，各方案随着实际总耗时统计分析
      */
+    private void test2(String memery, String sw) throws IOException {
 
-    private void test2() {
-        int numsSize = 1000;
+        Map<String, Object> result = new HashMap<>();
+        result.put("Memery", memery);
+
+        int numsSize = 2000;
         int[] nums = random.ints(RANDOM_MIN, RANDOM_MAX).limit(numsSize).toArray();
 
-        int size = 200;
+        int size = 300;
 
         List<Integer> lstX = new ArrayList<>(size);
         List<Long> method1TimeUsed = new ArrayList<>(size);
@@ -107,46 +115,76 @@ public class TwoSum {
             int targetCnt = 10 * i;
             lstX.add(targetCnt);
             int[] targets = random.ints(RANDOM_MIN, RANDOM_MAX).limit(targetCnt).toArray();
-//            System.out.println("Target: "+ Arrays.toString(targets));
 
             long u;
-            u = System.currentTimeMillis();
-            for (int target : targets) {
-                twosum1(nums, target);
+            if (sw.contains("-1-")) {
+                u = System.currentTimeMillis();
+                for (int target : targets) {
+                    twosum1(nums, target);
+                }
+                method1TimeUsed.add(System.currentTimeMillis() - u);
             }
-            method1TimeUsed.add(System.currentTimeMillis() - u);
 
-            u = System.currentTimeMillis();
-            for (int target : targets) {
-                twosum2(nums, target);
+            if (sw.contains("-2-")) {
+                u = System.currentTimeMillis();
+                for (int target : targets) {
+                    twosum2(nums, target);
+                }
+                method2TimeUsed.add(System.currentTimeMillis() - u);
             }
-            method2TimeUsed.add(System.currentTimeMillis() - u);
 
-            u = System.currentTimeMillis();
-            for (int target : targets) {
-                twosum3(nums, target);
+            if (sw.contains("-3-")) {
+                u = System.currentTimeMillis();
+                for (int target : targets) {
+                    twosum3(nums, target);
+                }
+                method3TimeUsed.add(System.currentTimeMillis() - u);
             }
-            method3TimeUsed.add(System.currentTimeMillis() - u);
         }
 
+        result.put("X", lstX);
+        result.put("Two For", method1TimeUsed);
+        result.put("Hash Left", method2TimeUsed);
+        result.put("Hash Left And Right", method3TimeUsed);
 
+        String filepath = "Test2_" + memery + "MB" + sdf.format(new Date()) + ".json";
+        File file = new File(filepath);
+        // if file doesn't exist, then create it
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath, true))) {
+            bufferedWriter.write(new ObjectMapper().writeValueAsString(result));
+        }
+/*
         Plot plot = Plot.create();
-        plot.plot().add(lstX, method1TimeUsed).label("Two For");
-        plot.plot().add(lstX, method2TimeUsed).label("Hash Left");
-        plot.plot().add(lstX, method3TimeUsed).label("Hash Left And Right");
+        if (sw.contains("-1-")) {
+            plot.plot().add(lstX, method1TimeUsed).label("2 For");
+        }
+        if (sw.contains("-2-")) {
+            plot.plot().add(lstX, method2TimeUsed).label("Hash Left");
+        }
+        if (sw.contains("-3-")) {
+            plot.plot().add(lstX, method3TimeUsed).label("Hash Left And Right");
+        }
 
         plot.legend().loc("upper left");
-        plot.title("Nums Size: " + numsSize);
+        plot.title("Nums Size: " + numsSize + " | Memery: " + memery + "MB");
         plot.xlabel("Target Count");
         plot.ylabel("Consume Time(ns)");
 
-        plot.savefig("Test2_" + numsSize + sdf.format(new Date()) + ".png").dpi(300).format("png");
+        plot.savefig("Test2_" + numsSize + "_" + memery + "MB" + sdf.format(new Date()) + ".png").dpi(300).format("png");
+
 
         try {
+
             plot.show();
+
         } catch (IOException | PythonExecutionException e) {
             throw new RuntimeException(e);
         }
+
+        plot.close();*/
     }
 
     /**
