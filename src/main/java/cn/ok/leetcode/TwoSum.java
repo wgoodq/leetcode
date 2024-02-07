@@ -5,9 +5,11 @@ import com.github.sh0nk.matplotlib4j.Plot;
 import com.github.sh0nk.matplotlib4j.PythonExecutionException;
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -21,6 +23,7 @@ public class TwoSum {
     public static void main(String[] args) throws IOException {
 
         String memery = args[0];
+        String sw = args[1];
 
         TwoSum twoSum = new TwoSum();
 
@@ -28,7 +31,7 @@ public class TwoSum {
         // twoSum.test1();
 
         // 在Nums数组固定情况下，各方案实际总耗时统计分析
-        twoSum.test2(memery, "-1-2-3-");
+        twoSum.test2(memery, sw);
 
         // 在Target数量固定时，分析各算法随着Nums数组变化，计算耗时情况。
         // 结论：
@@ -110,9 +113,14 @@ public class TwoSum {
         List<Long> method2TimeUsed = new ArrayList<>(size);
         List<Long> method3TimeUsed = new ArrayList<>(size);
 
-        for (int i = 1; i <= size; i++) {
+        /*int[] aa = new int[]{600, 700, 1500, 1700, 1800, 2000};
+        for (int i : aa) {
+            int targetCnt = i;*/
+
+        for (int i = 100; i <= size; i++) {
 
             int targetCnt = 10 * i;
+
             lstX.add(targetCnt);
             int[] targets = random.ints(RANDOM_MIN, RANDOM_MAX).limit(targetCnt).toArray();
 
@@ -143,48 +151,22 @@ public class TwoSum {
         }
 
         result.put("X", lstX);
-        result.put("Two For", method1TimeUsed);
-        result.put("Hash Left", method2TimeUsed);
-        result.put("Hash Left And Right", method3TimeUsed);
-
-        String filepath = "Test2_" + memery + "MB" + sdf.format(new Date()) + ".json";
-        File file = new File(filepath);
-        // if file doesn't exist, then create it
-        if (!file.exists()) {
-            file.createNewFile();
-        }
-        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath, true))) {
-            bufferedWriter.write(new ObjectMapper().writeValueAsString(result));
-        }
-/*
-        Plot plot = Plot.create();
         if (sw.contains("-1-")) {
-            plot.plot().add(lstX, method1TimeUsed).label("2 For");
+            result.put("Two For", method1TimeUsed);
         }
         if (sw.contains("-2-")) {
-            plot.plot().add(lstX, method2TimeUsed).label("Hash Left");
+            result.put("Hash Left", method2TimeUsed);
         }
         if (sw.contains("-3-")) {
-            plot.plot().add(lstX, method3TimeUsed).label("Hash Left And Right");
+            result.put("Hash Left And Right", method3TimeUsed);
         }
+        result.put("title", "Nums Length " + numsSize + " | Memery " + memery + "MB" + " | " + sw);
 
-        plot.legend().loc("upper left");
-        plot.title("Nums Size: " + numsSize + " | Memery: " + memery + "MB");
-        plot.xlabel("Target Count");
-        plot.ylabel("Consume Time(ns)");
-
-        plot.savefig("Test2_" + numsSize + "_" + memery + "MB" + sdf.format(new Date()) + ".png").dpi(300).format("png");
-
-
-        try {
-
-            plot.show();
-
-        } catch (IOException | PythonExecutionException e) {
-            throw new RuntimeException(e);
+        Path path = Paths.get("out/Test2_" + memery + "MB" + sdf.format(new Date()) + ".json");
+        System.out.println(path.toAbsolutePath());
+        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+            writer.write(new ObjectMapper().writeValueAsString(result));
         }
-
-        plot.close();*/
     }
 
     /**
